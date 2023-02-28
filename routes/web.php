@@ -14,12 +14,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+
     $posts = Post::all();
     return view('posts')->with('posts', $posts);
+
 });
 
 Route::get('posts/{post}', function($slug) {
+
     return view('post')->with([
-        'post' => Post::find($slug)
+        'post' => Post::findOrFail($slug)
     ]);
-})->where('post', '[A-z_\-]+');
+
+});

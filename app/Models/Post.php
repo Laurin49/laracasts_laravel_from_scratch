@@ -26,7 +26,6 @@ class Post
 
 
     public static function all() {
-
         return cache()->rememberForever('posts.all', function () {
             return $posts = collect(File::files(resource_path('posts')))
                 ->map(function($file) {
@@ -40,7 +39,14 @@ class Post
     }
 
     public static function find($slug) {
-        $posts = static::all();
-        return $posts->firstWhere('slug', $slug);
+        return static::all()->firstWhere('slug', $slug);
+    }
+
+    public static function findOrFail($slug) {
+        $post = static::find($slug);
+        if (! $post) {
+            throw new ModelNotFoundException();
+        }
+        return $post;
     }
 }
